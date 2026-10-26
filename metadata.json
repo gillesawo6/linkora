@@ -1,0 +1,6 @@
+{
+  "name": "Linkora",
+  "description": "Discover products, shops, and organized catalogues beyond WhatsApp groups. Find products locally and message sellers directly on WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
