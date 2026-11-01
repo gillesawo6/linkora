@@ -533,11 +533,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         position: 'bottom-right',
       });
       return;
-    } catch {
-      setLastSyncTime('Just now');
+    } catch (err: any) {
       setIsSyncing(false);
-      showToast(`Catalogue synced. ${products.length} products are up to date.`, {
-        type: 'success',
+      showToast(err?.message || 'Failed to sync with WhatsApp Business. Please check your connection.', {
+        type: 'error',
         position: 'bottom-right',
       });
       return;

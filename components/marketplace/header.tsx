@@ -22,7 +22,7 @@ export function MarketplaceHeader({
   const { user, currentShop } = useStore();
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xs border-b border-[#E3E9E4] transition-colors">
+    <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-[#E3E9E4]/70 shadow-[0_4px_24px_-4px_rgba(15,125,65,0.03)] transition-colors specular-edge-top">
       <div className="max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-10 h-16 sm:h-18 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Zone */}
         <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 shrink-0">
@@ -70,27 +70,36 @@ export function MarketplaceHeader({
           <div className="hidden sm:flex items-center gap-6 text-[15px] font-medium text-[#5B6861]">
             <Link
               href="/explore"
-              className={`hover:text-[#17211B] transition-colors ${
+              className={`relative py-1 hover:text-[#17211B] transition-colors ${
                 currentPath === '/explore' ? 'text-[#0F7D41] font-semibold' : ''
               }`}
             >
-              Explore
+              <span>Explore</span>
+              {currentPath === '/explore' && (
+                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
+              )}
             </Link>
             <Link
               href="/categories"
-              className={`hover:text-[#17211B] transition-colors ${
+              className={`relative py-1 hover:text-[#17211B] transition-colors ${
                 currentPath === '/categories' ? 'text-[#0F7D41] font-semibold' : ''
               }`}
             >
-              Categories
+              <span>Categories</span>
+              {currentPath === '/categories' && (
+                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
+              )}
             </Link>
             <Link
               href="/shops"
-              className={`hover:text-[#17211B] transition-colors ${
+              className={`relative py-1 hover:text-[#17211B] transition-colors ${
                 currentPath === '/shops' ? 'text-[#0F7D41] font-semibold' : ''
               }`}
             >
-              Discover shops
+              <span>Discover shops</span>
+              {currentPath === '/shops' && (
+                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
+              )}
             </Link>
           </div>
 
@@ -145,7 +154,7 @@ export function MarketplaceHeader({
                 </Link>
                 <Link
                   href="/seller/onboarding"
-                  className="inline-flex items-center justify-center h-8 sm:h-10 px-2.5 sm:px-4 rounded-[8px] sm:rounded-[10px] text-[12px] sm:text-[14px] font-medium bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white shadow-xs transition-colors shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0F7D41]"
+                  className="inline-flex items-center justify-center h-8 sm:h-10 px-2.5 sm:px-4 rounded-[8px] sm:rounded-[10px] text-[12px] sm:text-[14px] font-medium bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white shadow-xs transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0F7D41] cta-glow-emerald"
                 >
                   <span className="hidden min-[350px]:inline">Open your store</span>
                   <span className="inline min-[350px]:hidden">Sell</span>

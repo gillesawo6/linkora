@@ -727,7 +727,6 @@ export default function StoreSettingsPage() {
             <div className="pt-2 border-t border-[#E3E9E4]">
               <Link
                 href={`/shops/${slug}`}
-                target="_blank"
                 className="w-full h-9 rounded-[8px] bg-[#F7F9F7] hover:bg-[#EAEFEA] text-[13px] font-medium text-[#17211B] flex items-center justify-center gap-1.5 transition-colors"
               >
                 <span>Open full preview</span>

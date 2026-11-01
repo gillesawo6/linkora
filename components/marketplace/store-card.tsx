@@ -34,7 +34,7 @@ export function StoreCard({ shop }: StoreCardProps) {
   return (
     <Link
       href={`/shops/${shop.slug}`}
-      className="group block bg-white rounded-[20px] p-4 border border-[#E3E9E4] hover:border-[#0F7D41]/30 hover:shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+      className="group block bg-white/95 rounded-[22px] p-4 sm:p-5 border border-[#E3E9E4] hover:border-[#0F7D41]/40 hover:shadow-[0_16px_36px_-8px_rgba(15,125,65,0.1),0_4px_12px_rgba(0,0,0,0.02)] transition-all duration-250 hover:-translate-y-1 specular-edge-top"
     >
       {/* 3 Preview Squares */}
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -94,7 +94,7 @@ export function StoreCard({ shop }: StoreCardProps) {
             onClick={handleWhatsAppContact}
             title={`Ask ${shop.name} on WhatsApp`}
             aria-label={`Ask ${shop.name} on WhatsApp`}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] hover:bg-[#E8F7EE] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/60 hover:bg-[#E8F7EE] hover:shadow-[0_0_12px_rgba(15,125,65,0.3)] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
           >
             <SpeechBubbleIcon className="w-4 h-4" />
           </button>

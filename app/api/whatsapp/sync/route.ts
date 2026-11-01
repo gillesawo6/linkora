@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getMetaConfig } from '@/lib/meta-config';
 
 export async function POST(request: NextRequest) {
-  const metaAppId = process.env.META_APP_ID;
-  const metaAppSecret = process.env.META_APP_SECRET;
-  const metaWabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+  const { metaAppId, metaAppSecret, wabaId: metaWabaId } = getMetaConfig();
 
   // Truthful check: If Meta API credentials are not set on server
   if (!metaAppId || !metaAppSecret) {

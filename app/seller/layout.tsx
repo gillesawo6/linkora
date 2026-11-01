@@ -112,7 +112,6 @@ export default function SellerLayout({
       <div className="p-4 border-t border-white/10 space-y-3">
         <Link
           href={`/shops/${currentShop.slug}`}
-          target="_blank"
           className="flex items-center gap-2 px-3 py-2 rounded-[10px] text-[13px] text-[#A3B2A9] hover:text-white hover:bg-white/5 transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
@@ -249,7 +248,6 @@ export default function SellerLayout({
           <div className="flex items-center gap-3">
             <Link
               href={`/shops/${currentShop.slug}`}
-              target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 h-10 px-4 rounded-[10px] bg-white border border-[#E3E9E4] hover:bg-[#F7F9F7] text-[13.5px] font-medium text-[#17211B] transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5 text-[#5B6861]" />

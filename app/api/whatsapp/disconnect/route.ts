@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { disconnectShopConnection } from '@/lib/whatsapp-connection-store';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const shopId = body.shopId;
+    const shopId = body.shopId || 'shop-maison-ndolo';
 
-    // Disconnect WhatsApp Business connection for this store
+    // Clear server-side connection record
+    const updated = disconnectShopConnection(shopId);
+
     return NextResponse.json({
       success: true,
       shopId,
-      status: 'not_connected',
+      status: updated.status,
+      verified: updated.verified,
       message: 'WhatsApp Business account successfully disconnected from Linkora.',
       disconnectedAt: new Date().toISOString(),
     });

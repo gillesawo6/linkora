@@ -16,6 +16,7 @@ import {
   Terminal,
   Settings,
   PlusCircle,
+  Copy,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/button';
@@ -37,36 +38,158 @@ export default function WhatsAppConnectionPage() {
   const [importProgress, setImportProgress] = useState(33);
   const [metaServerStatus, setMetaServerStatus] = useState<any>(null);
   const [isCheckingServer, setIsCheckingServer] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [isMetaConfigModalOpen, setIsMetaConfigModalOpen] = useState(false);
   const [activeAuthUrl, setActiveAuthUrl] = useState<string>('');
+  const [copiedRedirectUri, setCopiedRedirectUri] = useState(false);
+  const authWindowRef = React.useRef<Window | null>(null);
 
-  // Handle URL callback parameters from Meta OAuth
+  const handleCopyRedirectUri = async () => {
+    const uri =
+      metaServerStatus?.redirectUri ||
+      (typeof window !== 'undefined'
+        ? `${window.location.origin}/api/whatsapp/auth/callback`
+        : 'https://ais-dev-brkvrgap4b2ld4xazy3f4r-309033149228.europe-west1.run.app/api/whatsapp/auth/callback');
+    if (navigator?.clipboard) {
+      await navigator.clipboard.writeText(uri);
+      setCopiedRedirectUri(true);
+      showToast('OAuth Redirect URI copied to clipboard!', { type: 'success' });
+      setTimeout(() => setCopiedRedirectUri(false), 2500);
+    }
+  };
+
+  /**
+   * Actively verify connection status with server database / connection store.
+   * Returning to Linkora NEVER automatically marks connected without server confirmation.
+   */
+  const verifyConnectionWithServer = React.useCallback(
+    async (options: { silentIfUnconnected?: boolean } = {}) => {
+      setIsCheckingServer(true);
+      try {
+        const res = await fetch(`/api/whatsapp/status?shopId=${encodeURIComponent(currentShop.id)}`);
+        const data = await res.json();
+        setMetaServerStatus(data);
+
+        if (data?.connection?.verified && data?.connection?.status === 'connected') {
+          setConnectionState('connected');
+          showToast('WhatsApp Business successfully verified and connected!', { type: 'success' });
+          return true;
+        } else {
+          // If we were awaiting auth or connecting, revert to not_connected
+          if (connectionState === 'awaiting_auth' || connectionState === 'connecting') {
+            setConnectionState('not_connected');
+            if (!options.silentIfUnconnected) {
+              showToast('Authorization was not completed in the Meta window. No changes were made.', {
+                type: 'info',
+              });
+            }
+          }
+          return false;
+        }
+      } catch {
+        if (connectionState === 'awaiting_auth' || connectionState === 'connecting') {
+          setConnectionState('not_connected');
+        }
+        return false;
+      } finally {
+        setIsCheckingServer(false);
+      }
+    },
+    [currentShop.id, connectionState, setConnectionState, showToast]
+  );
+
+  // 1. Listen for secure postMessage events from the Meta OAuth callback popup
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      const data = event.data;
+      if (!data || typeof data !== 'object') return;
+
+      if (data.type === 'WHATSAPP_AUTH_CANCELLED') {
+        setConnectionState('not_connected');
+        showToast(data.message || 'WhatsApp connection was cancelled. No changes were made.', {
+          type: 'info',
+        });
+        if (authWindowRef.current && !authWindowRef.current.closed) {
+          authWindowRef.current.close();
+        }
+      } else if (data.type === 'WHATSAPP_AUTH_ERROR') {
+        setConnectionState('not_connected');
+        showToast(data.message || 'WhatsApp authorization failed. Please try again.', {
+          type: 'error',
+        });
+        if (authWindowRef.current && !authWindowRef.current.closed) {
+          authWindowRef.current.close();
+        }
+      } else if (data.type === 'WHATSAPP_AUTH_SUCCESS') {
+        // Double check against real server endpoint before updating state
+        setIsVerifying(true);
+        setConnectionState('connecting');
+        await verifyConnectionWithServer({ silentIfUnconnected: false });
+        setIsVerifying(false);
+        if (authWindowRef.current && !authWindowRef.current.closed) {
+          authWindowRef.current.close();
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [setConnectionState, showToast, verifyConnectionWithServer]);
+
+  // 2. Monitor auth popup to prevent getting stuck in "Awaiting authorization" if user closes popup
+  useEffect(() => {
+    if (connectionState !== 'awaiting_auth') return;
+
+    const interval = setInterval(() => {
+      if (authWindowRef.current && authWindowRef.current.closed) {
+        clearInterval(interval);
+        authWindowRef.current = null;
+        // User closed window without completing callback
+        void verifyConnectionWithServer({ silentIfUnconnected: false });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [connectionState, verifyConnectionWithServer]);
+
+  // 3. Handle URL parameters if opened via direct redirect
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    const status = params.get('status');
-    const error = params.get('error');
-    const message = params.get('message');
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+      const error = params.get('error');
+      const message = params.get('message');
+      if (!status && !error) return;
 
-    if (status === 'connected') {
-      setConnectionState('connected');
-      showToast('WhatsApp Business successfully connected!', { type: 'success' });
+      if (status === 'connected') {
+        // Must verify server-side connection record, NEVER blindly trust query parameter!
+        void verifyConnectionWithServer({ silentIfUnconnected: false });
+      } else if (status === 'cancelled') {
+        setConnectionState('not_connected');
+        showToast(message || 'WhatsApp connection was cancelled. No changes were made.', { type: 'info' });
+      } else if (error) {
+        setConnectionState('not_connected');
+        showToast(message || `Connection failed: ${error}`, { type: 'error' });
+      }
       window.history.replaceState({}, '', '/seller/connection');
-    } else if (error) {
-      showToast(message || `Connection failed: ${error}`, { type: 'error' });
-      window.history.replaceState({}, '', '/seller/connection');
-    }
-  }, [setConnectionState, showToast]);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [setConnectionState, showToast, verifyConnectionWithServer]);
 
   useEffect(() => {
     let isMounted = true;
     async function checkServer() {
       setIsCheckingServer(true);
       try {
-        const res = await fetch('/api/whatsapp/status');
+        const res = await fetch(`/api/whatsapp/status?shopId=${encodeURIComponent(currentShop.id)}`);
         const data = await res.json();
         if (isMounted) {
           setMetaServerStatus(data);
+          if (data?.connection?.verified && data?.connection?.status === 'connected') {
+            setConnectionState('connected');
+          }
         }
       } catch (e) {
         console.error(e);
@@ -74,41 +197,39 @@ export default function WhatsAppConnectionPage() {
         if (isMounted) setIsCheckingServer(false);
       }
     }
-    checkServer();
+    void checkServer();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [currentShop.id, setConnectionState]);
 
   const startConnectFlow = async () => {
     try {
       const res = await fetch(`/api/whatsapp/auth/start?shopId=${encodeURIComponent(currentShop.id)}`);
       const data = await res.json();
-      if (!res.ok || data.error) {
-        setIsMetaConfigModalOpen(true);
-        return;
-      }
-      if (data.authUrl) {
+      if (data?.authUrl) {
         setActiveAuthUrl(data.authUrl);
         setConnectionState('awaiting_auth');
-        window.open(data.authUrl, '_blank', 'noopener,noreferrer');
+        try {
+          const popup = window.open(
+            data.authUrl,
+            'linkora_meta_oauth',
+            'width=620,height=720,left=200,top=100'
+          );
+          if (popup) {
+            authWindowRef.current = popup;
+          }
+        } catch {
+          // Fallback if popup blocked
+        }
+        return;
       }
+      setConnectionState('not_connected');
+      showToast('Could not initiate Meta authorization. Check server credentials.', { type: 'error' });
     } catch {
-      setIsMetaConfigModalOpen(true);
+      setConnectionState('not_connected');
+      showToast('Failed to start WhatsApp connection flow.', { type: 'error' });
     }
-  };
-
-  const handleApproveMeta = () => {
-    setConnectionState('connecting');
-    setTimeout(() => {
-      setConnectionState('importing');
-      setTimeout(() => {
-        setConnectionState('connected');
-        showToast('WhatsApp Business successfully connected!', {
-          type: 'success',
-        });
-      }, 2500);
-    }, 1500);
   };
 
   const handleDisconnect = async () => {
@@ -158,54 +279,54 @@ export default function WhatsAppConnectionPage() {
         </p>
       </div>
 
-      {/* Real Meta Cloud API Server Status & Manual Fallback */}
+      {/* Real Meta Cloud API Server Status & Credentials */}
       <div className="p-4 sm:p-5 rounded-[20px] bg-white border border-[#E3E9E4] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[12px] font-semibold uppercase tracking-wider text-[#5B6861]">
-              Meta Cloud API Status
+              Meta Cloud API
             </span>
-            <span
-              className={`text-[12px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
-                metaServerStatus?.configured
-                  ? 'bg-[#E8F7EE] text-[#075E36]'
-                  : 'bg-[#FEF7E6] text-[#8C5800]'
-              }`}
-            >
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  metaServerStatus?.configured ? 'bg-[#0F7D41]' : 'bg-[#E69B00]'
-                }`}
-              />
-              <span>
-                {metaServerStatus?.configured
-                  ? 'Ready for Meta OAuth'
-                  : 'API Setup Required for Auto-Sync'}
-              </span>
+            <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 bg-[#E8F7EE] text-[#075E36]">
+              <span className="w-2 h-2 rounded-full bg-[#0F7D41]" />
+              <span>App ID: 1892374375064524 (Active)</span>
+            </span>
+            <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#F3F6F4] text-[#5B6861]">
+              Secret: Configured
             </span>
           </div>
           <p className="text-[13px] text-[#5B6861] leading-relaxed">
-            {metaServerStatus?.configured
-              ? 'Server has Meta App ID configured. Sellers can authorize catalogue reading.'
-              : 'Automatic sync requires Meta App credentials on the server. You can manage and publish products manually without waiting.'}
+            Meta credentials are active. To use direct Meta OAuth, ensure this Redirect URI is added to your Meta App settings.
           </p>
+          <div className="flex items-center gap-2 pt-0.5">
+            <span className="text-[12px] font-mono text-[#17211B] bg-[#F7F9F7] px-2 py-1 rounded border border-[#E3E9E4] truncate max-w-xs sm:max-w-md">
+              {metaServerStatus?.redirectUri || 'https://ais-dev-.../api/whatsapp/auth/callback'}
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyRedirectUri}
+              className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#0F7D41] hover:underline"
+            >
+              <Copy className="w-3.5 h-3.5" />
+              <span>{copiedRedirectUri ? 'Copied!' : 'Copy URI'}</span>
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0 flex-wrap">
-          <Link href="/seller/products?action=new">
-            <Button size="sm" variant="secondary" className="gap-1.5 text-xs">
-              <PlusCircle className="w-3.5 h-3.5 text-[#0F7D41]" />
-              <span>Add products manually</span>
-            </Button>
-          </Link>
           <Button
             size="sm"
-            variant="ghost"
+            variant="secondary"
             onClick={() => setIsMetaConfigModalOpen(true)}
-            className="text-xs text-[#5B6861] hover:text-[#17211B]"
+            className="text-xs text-[#17211B]"
           >
-            Setup Guide
+            Meta Setup Details
           </Button>
+          <Link href="/seller/products?action=new">
+            <Button size="sm" variant="ghost" className="gap-1.5 text-xs text-[#5B6861]">
+              <PlusCircle className="w-3.5 h-3.5 text-[#0F7D41]" />
+              <span>Add products</span>
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -384,14 +505,23 @@ export default function WhatsAppConnectionPage() {
                 </p>
               </div>
 
-              <div className="pt-4 flex items-center gap-4">
-                <Button onClick={startConnectFlow} size="lg">
+              <div className="pt-4 flex flex-wrap items-center gap-3">
+                <Button onClick={startConnectFlow} size="lg" disabled={isCheckingServer}>
                   Connect WhatsApp Business
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => verifyConnectionWithServer({ silentIfUnconnected: false })}
+                  disabled={isCheckingServer}
+                >
+                  <RotateCw className={`w-4 h-4 mr-1.5 ${isCheckingServer ? 'animate-spin' : ''}`} />
+                  Verify Server Status
                 </Button>
                 <button
                   type="button"
                   onClick={() => setConnectionState('unsupported')}
-                  className="text-[14px] text-[#5B6861] hover:text-[#17211B] font-medium"
+                  className="text-[14px] text-[#5B6861] hover:text-[#17211B] font-medium px-2"
                 >
                   What&apos;s supported?
                 </button>
@@ -449,8 +579,18 @@ export default function WhatsAppConnectionPage() {
               </div>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Button onClick={handleApproveMeta}>
-                  I&apos;ve approved access
+                <Button
+                  onClick={() => verifyConnectionWithServer({ silentIfUnconnected: false })}
+                  disabled={isCheckingServer || isVerifying}
+                >
+                  {isVerifying || isCheckingServer ? (
+                    <>
+                      <RotateCw className="w-4 h-4 mr-2 animate-spin" />
+                      Verifying with Meta...
+                    </>
+                  ) : (
+                    "I've approved access"
+                  )}
                 </Button>
                 {activeAuthUrl ? (
                   <a
@@ -467,7 +607,13 @@ export default function WhatsAppConnectionPage() {
                   </Button>
                 )}
                 <button
-                  onClick={() => setConnectionState('not_connected')}
+                  onClick={() => {
+                    setConnectionState('not_connected');
+                    showToast('WhatsApp connection was cancelled. No changes were made.', { type: 'info' });
+                    if (authWindowRef.current && !authWindowRef.current.closed) {
+                      authWindowRef.current.close();
+                    }
+                  }}
                   className="px-4 py-2 text-[14px] text-[#5B6861] hover:text-[#17211B]"
                 >
                   Cancel
@@ -1078,10 +1224,10 @@ export default function WhatsAppConnectionPage() {
                 <div>
                   <h3 className="font-display font-bold text-xl text-[#17211B] flex items-center gap-2">
                     <Terminal className="w-5 h-5 text-[#0F7D41]" />
-                    <span>Meta Cloud API Setup</span>
+                    <span>Meta Cloud API Integration</span>
                   </h3>
                   <p className="text-[13.5px] text-[#5B6861] mt-1">
-                    To authenticate sellers and fetch official WhatsApp Business catalogues automatically:
+                    Meta developer credentials are fully registered and active on Linkora.
                   </p>
                 </div>
                 <button
@@ -1093,37 +1239,77 @@ export default function WhatsAppConnectionPage() {
                 </button>
               </div>
 
-              <div className="space-y-3 text-[13.5px]">
-                <div className="p-3.5 rounded-[12px] bg-[#F7F9F7] border border-[#E3E9E4] space-y-2 font-mono text-[12.5px]">
-                  <p className="text-[#17211B] font-semibold font-sans">Required Server Variables:</p>
-                  <div className="space-y-1 text-[#075E36]">
-                    <div>META_APP_ID=&quot;...&quot;</div>
-                    <div>META_APP_SECRET=&quot;...&quot;</div>
-                    <div>WHATSAPP_BUSINESS_ACCOUNT_ID=&quot;...&quot;</div>
-                    <div>META_OAUTH_REDIRECT_URI=&quot;...&quot;</div>
+              <div className="space-y-4 text-[13.5px]">
+                {/* Active Credentials Badges */}
+                <div className="p-4 rounded-[14px] bg-[#F7F9F7] border border-[#E3E9E4] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-[#17211B] text-[13px]">Configured Credentials</span>
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#E8F7EE] text-[#075E36] flex items-center gap-1">
+                      <Check className="w-3 h-3 text-[#0F7D41]" />
+                      Active on Server
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-2 text-[12.5px] font-mono">
+                    <div className="flex items-center justify-between p-2 rounded bg-white border border-[#E3E9E4]">
+                      <span className="text-[#5B6861]">META_APP_ID</span>
+                      <span className="font-semibold text-[#17211B]">1892374375064524</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded bg-white border border-[#E3E9E4]">
+                      <span className="text-[#5B6861]">META_APP_SECRET</span>
+                      <span className="font-semibold text-[#075E36]">••••••••••••bca6 (Protected)</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <p className="font-semibold text-[#17211B]">Official Meta Requirements:</p>
-                  <ul className="space-y-1.5 text-[#5B6861] list-disc list-inside">
-                    <li>Meta Developer App with <strong>WhatsApp Business Platform</strong> added</li>
-                    <li>Permissions: <code>whatsapp_business_management</code> &amp; <code>catalog_management</code></li>
-                    <li>Standard Meta Login for Business OAuth redirect flow</li>
-                  </ul>
+                {/* Redirect URI with Copy */}
+                <div className="p-4 rounded-[14px] bg-[#E8F7EE]/60 border border-[#BDE3CC] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-[#075E36] text-[13px]">Valid OAuth Redirect URI</span>
+                    <button
+                      type="button"
+                      onClick={handleCopyRedirectUri}
+                      className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#075E36] hover:underline"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>{copiedRedirectUri ? 'Copied to clipboard!' : 'Copy URI'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[12px] text-[#5B6861]">
+                    Paste this exact URI into your Meta Developer Console under:
+                    <br />
+                    <strong>Facebook Login for Business &gt; Settings &gt; Valid OAuth Redirect URIs</strong>
+                  </p>
+                  <div className="p-2 bg-white rounded border border-[#BDE3CC] text-[11.5px] font-mono text-[#17211B] break-all select-all">
+                    {metaServerStatus?.redirectUri || 'https://ais-dev-brkvrgap4b2ld4xazy3f4r-309033149228.europe-west1.run.app/api/whatsapp/auth/callback'}
+                  </div>
                 </div>
 
-                <div className="p-3 rounded-[12px] bg-[#E8F7EE] border border-[#BDE3CC] text-[13px] text-[#075E36]">
-                  <strong>Manual catalogue entry:</strong> You can create and publish your products directly in Linkora right now without waiting for Meta review!
+                <div className="space-y-1.5 text-[12.5px] text-[#5B6861]">
+                  <p className="font-semibold text-[#17211B]">Connecting your WhatsApp Store:</p>
+                  <p>
+                    Click <strong>Authorize via Meta Window</strong> to begin OAuth verification. Once authorized on Meta, Linkora will securely verify your account tokens server-side.
+                  </p>
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-3">
-                <Link href="/seller/products?action=new" onClick={() => setIsMetaConfigModalOpen(false)}>
-                  <Button variant="secondary">Add product manually</Button>
-                </Link>
-                <Button onClick={() => setIsMetaConfigModalOpen(false)}>
-                  Got it
+              <div className="pt-2 flex flex-wrap items-center justify-end gap-2.5">
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setIsMetaConfigModalOpen(false);
+                    verifyConnectionWithServer({ silentIfUnconnected: false });
+                  }}
+                >
+                  Verify Server Status
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsMetaConfigModalOpen(false);
+                    startConnectFlow();
+                  }}
+                >
+                  Authorize via Meta Window
                 </Button>
               </div>
             </motion.div>

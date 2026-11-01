@@ -65,7 +65,7 @@ export const PRODUCT_IMAGES: Record<string, ProductImageData> = {
     main: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1608248597359-2c70d4263660?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85',
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=85',
     ],
     alt: 'Amber glass dropper bottle of pure brightening Vitamin C facial serum with botanical extracts',
@@ -159,7 +159,7 @@ export const PRODUCT_IMAGES: Record<string, ProductImageData> = {
     main: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=85',
-      'https://images.unsplash.com/photo-1608248545890-076cbdb7e972?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=1000&q=85',
     ],
     alt: 'Frosted cosmetic jar filled with whipped unrefined botanical shea butter',
     bgTint: '#FAF6ED',
@@ -275,7 +275,7 @@ export const SHOP_IMAGES: Record<string, ShopImageData> = {
     avatar:
       'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=400&q=80',
     storefront:
-      'https://images.unsplash.com/photo-1537832817056-821e25e86d26?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=600&q=80',
   },
 
   // Kribi Kicks (Douala, Curated Sneakers & Streetwear)
@@ -311,7 +311,7 @@ export const SHOP_IMAGES: Record<string, ShopImageData> = {
   // Mobile Hub (Bamenda, Smartphones & Accessories)
   'shop-mobile-hub': {
     cover:
-      'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80',
     avatar:
       'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=400&q=80',
     storefront:

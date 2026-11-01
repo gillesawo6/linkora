@@ -100,11 +100,24 @@ export default function SellerProductsPage() {
 
   const handleCreateProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newProdName.trim()) return;
+    const cleanName = newProdName.trim();
+    if (!cleanName) {
+      showToast('Product name is required.', { type: 'error' });
+      return;
+    }
 
-    const parsedPrice = newProdPrice ? Number(newProdPrice) : null;
+    let parsedPrice: number | null = null;
+    if (newProdPrice.trim()) {
+      const num = Number(newProdPrice);
+      if (isNaN(num) || num < 0) {
+        showToast('Please enter a valid price (greater than or equal to 0).', { type: 'error' });
+        return;
+      }
+      parsedPrice = Math.round(num);
+    }
+
     addProduct({
-      name: newProdName.trim(),
+      name: cleanName,
       price: parsedPrice,
       currency: 'FCFA',
       shopId: 'shop-maison-ndolo',
@@ -574,7 +587,6 @@ export default function SellerProductsPage() {
                 </div>
                 <Link
                   href={`/products/${selectedProduct.id}`}
-                  target="_blank"
                   className="text-[13.5px] font-medium text-[#0F7D41] hover:underline flex items-center gap-1"
                 >
                   <span>View public page</span>

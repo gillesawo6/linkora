@@ -48,10 +48,10 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <Link
         href={`/products/${product.id}`}
-        className="group flex flex-col h-full bg-white rounded-[20px] p-3 border border-[#E3E9E4] hover:border-[#0F7D41]/35 hover:shadow-sm transition-colors duration-180"
+        className="group flex flex-col h-full bg-white/95 rounded-[22px] p-3 border border-[#E3E9E4] hover:border-[#0F7D41]/35 hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.09),0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-200 specular-edge-top"
       >
         {/* 1:1 Square Image */}
-        <div className="w-full aspect-square rounded-[16px] overflow-hidden">
+        <div className="w-full aspect-square rounded-[16px] overflow-hidden relative">
           <ProductImage
             src={product.imageUrl}
             alt={product.imageAlt || product.name}
@@ -79,7 +79,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="mt-2.5 pt-2 border-t border-[#F0F4F2] flex items-center justify-between gap-1 text-[13px] text-[#5B6861]">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <span
-                className="w-5 h-5 rounded-full bg-[#E8F7EE] text-[#075E36] font-semibold text-[11px] flex items-center justify-center shrink-0"
+                className="w-5 h-5 rounded-full bg-[#E8F7EE] text-[#075E36] font-semibold text-[11px] flex items-center justify-center shrink-0 border border-[#8AD3A8]/30"
                 aria-hidden="true"
               >
                 {product.shopName.charAt(0)}
@@ -99,7 +99,7 @@ export function ProductCard({ product }: ProductCardProps) {
               onClick={handleQuickAsk}
               title={`Ask ${product.shopName} on WhatsApp`}
               aria-label={`Ask ${product.shopName} about ${product.name} on WhatsApp`}
-              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] hover:bg-[#E8F7EE] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
+              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/60 hover:bg-[#E8F7EE] hover:shadow-[0_0_12px_rgba(15,125,65,0.3)] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
             >
               <SpeechBubbleIcon className="w-4 h-4" />
             </button>

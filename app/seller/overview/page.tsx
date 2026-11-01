@@ -110,7 +110,7 @@ export default function SellerOverviewPage() {
             },
           }}
           whileHover={{ y: -2 }}
-          className="p-5 rounded-[20px] bg-white border border-[#E3E9E4] space-y-1 shadow-xs transition-colors"
+          className="p-5 rounded-[22px] glass-surface-card specular-edge-top border border-white/80 space-y-1 shadow-xs hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.08)] transition-all duration-200"
         >
           <span className="text-[13px] text-[#5B6861] font-medium">
             Synchronised products
@@ -133,7 +133,7 @@ export default function SellerOverviewPage() {
             },
           }}
           whileHover={{ y: -2 }}
-          className="p-5 rounded-[20px] bg-white border border-[#E3E9E4] space-y-1 shadow-xs transition-colors"
+          className="p-5 rounded-[22px] glass-surface-card specular-edge-top border border-white/80 space-y-1 shadow-xs hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.08)] transition-all duration-200"
         >
           <span className="text-[13px] text-[#5B6861] font-medium">
             Catalogue connection
@@ -156,7 +156,7 @@ export default function SellerOverviewPage() {
             },
           }}
           whileHover={{ y: -2 }}
-          className="p-5 rounded-[20px] bg-white border border-[#E3E9E4] space-y-1 shadow-xs transition-colors"
+          className="p-5 rounded-[22px] glass-surface-card specular-edge-top border border-white/80 space-y-1 shadow-xs hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.08)] transition-all duration-200"
         >
           <span className="text-[13px] text-[#5B6861] font-medium">
             Last successful sync
@@ -179,7 +179,7 @@ export default function SellerOverviewPage() {
             },
           }}
           whileHover={{ y: -2 }}
-          className="p-5 rounded-[20px] bg-white border border-[#E3E9E4] space-y-1 shadow-xs transition-colors"
+          className="p-5 rounded-[22px] glass-surface-card specular-edge-top border border-white/80 space-y-1 shadow-xs hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.08)] transition-all duration-200"
         >
           <span className="text-[13px] text-[#5B6861] font-medium">
             Needs attention

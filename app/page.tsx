@@ -23,6 +23,7 @@ import { MobileBottomNav } from '@/components/marketplace/mobile-bottom-nav';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { StoreCard } from '@/components/marketplace/store-card';
 import { SearchAutocomplete } from '@/components/marketplace/search-autocomplete';
+import { AbstractContourBackground } from '@/components/ui/abstract-contour-background';
 import { PRODUCTS, SHOPS, CATEGORIES, CITIES } from '@/lib/data/sample-data';
 import type { Variants } from 'motion/react';
 
@@ -164,9 +165,12 @@ export default function HomePage() {
       <MarketplaceHeader currentPath="/" />
 
       <main className="flex-1 pb-16">
-        {/* HERO SECTION WITH CHOREOGRAPHED ENTRANCE */}
-        <section className="pt-8 sm:pt-14 pb-12 sm:pb-20 border-b border-[#E3E9E4]/60 bg-gradient-to-b from-white to-[#F7F9F7]">
-          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+        {/* HERO SECTION WITH ABSTRACT BACKGROUND & AMBIENT GLASSMORPHISM */}
+        <section className="relative pt-8 sm:pt-14 pb-14 sm:pb-22 border-b border-[#E3E9E4]/70 overflow-hidden bg-gradient-to-b from-white via-[#F7FAF8] to-[#F7F9F7]">
+          {/* Organic Contours & Ambient Lighting Background Canvas */}
+          <AbstractContourBackground variant="hero" />
+
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
               {/* Left Column: Sequenced Value Proposition & Search */}
               <motion.div
@@ -175,17 +179,24 @@ export default function HomePage() {
                 animate="visible"
                 className="lg:col-span-7 space-y-6"
               >
+                {/* Elevated Frosted Glass Kicker Badge */}
                 <motion.div
                   variants={heroItem}
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F7EE] text-[#075E36] text-[13px] font-medium"
+                  className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-badge text-[13px] font-medium shadow-xs"
                 >
-                  <Compass className="w-3.5 h-3.5" />
-                  <span>Discovery for WhatsApp-connected shops</span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0F7D41] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0F7D41]" />
+                  </span>
+                  <Compass className="w-3.5 h-3.5 text-[#0F7D41]" />
+                  <span className="font-semibold text-[#075E36]">Discovery for WhatsApp-connected shops</span>
+                  <span className="text-[#8AD3A8] hidden sm:inline">·</span>
+                  <span className="text-[#5B6861] hidden sm:inline text-xs font-normal">Central &amp; West Africa</span>
                 </motion.div>
 
                 <motion.h1
                   variants={heroItem}
-                  className="font-display font-bold text-4xl sm:text-5xl lg:text-[54px] tracking-tight text-[#17211B] leading-[1.08] text-balance"
+                  className="font-display font-bold text-4xl sm:text-5xl lg:text-[54px] tracking-tight text-[#17211B] leading-[1.08] text-balance drop-shadow-2xs"
                 >
                   Discover great shops{' '}
                   <span className="text-[#0F7D41]">beyond your</span> WhatsApp
@@ -200,17 +211,17 @@ export default function HomePage() {
                   catalogues — all in one place.
                 </motion.p>
 
-                {/* Search Box Widget */}
+                {/* Frosted Glass Search Box Command Widget */}
                 <motion.div
                   variants={heroItem}
-                  className="bg-white p-3 sm:p-4 rounded-[20px] border border-[#E3E9E4] shadow-sm max-w-xl"
+                  className="glass-surface-hero specular-edge-top p-4 sm:p-5 rounded-[24px] max-w-xl relative"
                 >
                   {/* Tabs: Products vs Shops with animated indicator */}
-                  <div className="flex items-center gap-1 mb-3 relative">
+                  <div className="flex items-center gap-1.5 mb-3.5 relative">
                     <button
                       type="button"
                       onClick={() => setSearchTab('products')}
-                      className={`relative px-3 py-1 rounded-[8px] text-[13px] font-medium transition-colors ${
+                      className={`relative px-3.5 py-1.5 rounded-[10px] text-[13px] font-medium transition-colors ${
                         searchTab === 'products'
                           ? 'text-[#075E36] font-semibold'
                           : 'text-[#5B6861] hover:text-[#17211B]'
@@ -219,7 +230,7 @@ export default function HomePage() {
                       {searchTab === 'products' && (
                         <motion.div
                           layoutId="searchTabPill"
-                          className="absolute inset-0 bg-[#E8F7EE] rounded-[8px] -z-10"
+                          className="absolute inset-0 bg-[#E8F7EE]/90 backdrop-blur-xs rounded-[10px] -z-10 border border-[#8AD3A8]/40 shadow-xs"
                           transition={{ duration: 0.18, ease: EASE_OUT }}
                         />
                       )}
@@ -228,7 +239,7 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => setSearchTab('shops')}
-                      className={`relative px-3 py-1 rounded-[8px] text-[13px] font-medium transition-colors ${
+                      className={`relative px-3.5 py-1.5 rounded-[10px] text-[13px] font-medium transition-colors ${
                         searchTab === 'shops'
                           ? 'text-[#075E36] font-semibold'
                           : 'text-[#5B6861] hover:text-[#17211B]'
@@ -237,7 +248,7 @@ export default function HomePage() {
                       {searchTab === 'shops' && (
                         <motion.div
                           layoutId="searchTabPill"
-                          className="absolute inset-0 bg-[#E8F7EE] rounded-[8px] -z-10"
+                          className="absolute inset-0 bg-[#E8F7EE]/90 backdrop-blur-xs rounded-[10px] -z-10 border border-[#8AD3A8]/40 shadow-xs"
                           transition={{ duration: 0.18, ease: EASE_OUT }}
                         />
                       )}
@@ -246,7 +257,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Search Input and City Selector */}
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2.5">
                     <div className="relative flex-1">
                       <SearchAutocomplete
                         initialValue={searchQuery}
@@ -255,7 +266,7 @@ export default function HomePage() {
                             ? 'Search shops by name, category, or city...'
                             : 'Search sneakers, laptops, ankara dresses...'
                         }
-                        inputClassName="h-11 rounded-[10px]"
+                        inputClassName="h-11 rounded-[12px] bg-white/95 border-[#E3E9E4] focus:border-[#0F7D41]"
                         targetTab={searchTab}
                         selectedCity={selectedCity}
                         onValueChange={(val) => setSearchQuery(val)}
@@ -279,7 +290,7 @@ export default function HomePage() {
                       value={selectedCity}
                       onChange={(e) => setSelectedCity(e.target.value)}
                       aria-label="Filter search by city"
-                      className="h-11 px-3 rounded-[10px] bg-[#F7F9F7] text-[14px] text-[#17211B] border border-[#E3E9E4] focus:outline-none focus:border-[#0F7D41] transition-colors cursor-pointer"
+                      className="h-11 px-3.5 rounded-[12px] bg-white/95 text-[14px] text-[#17211B] border border-[#E3E9E4] focus:outline-none focus:border-[#0F7D41] transition-colors cursor-pointer shadow-2xs"
                     >
                       {CITIES.map((c) => (
                         <option key={c.name} value={c.name}>
@@ -291,15 +302,15 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => handleSearchSubmit()}
-                      className="h-11 px-5 rounded-[10px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold transition-colors active:scale-[0.98] shrink-0"
+                      className="h-11 px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold transition-all active:scale-[0.98] shrink-0 cta-glow-emerald"
                     >
                       Search
                     </button>
                   </div>
 
                   {/* Popular tags */}
-                  <div className="mt-3 pt-3 border-t border-[#F0F4F2] flex items-center flex-wrap gap-2 text-[13px]">
-                    <span className="text-[#5B6861] font-medium">Popular</span>
+                  <div className="mt-3.5 pt-3 border-t border-[#E3E9E4]/60 flex items-center flex-wrap gap-2 text-[13px]">
+                    <span className="text-[#5B6861] font-medium text-xs uppercase tracking-wider">Popular</span>
                     {[
                       'Sneakers',
                       'Laptops',
@@ -311,7 +322,7 @@ export default function HomePage() {
                         key={tag}
                         type="button"
                         onClick={() => handleQuickFilter(tag)}
-                        className="px-2.5 py-1 rounded-[8px] bg-[#F3F6F4] hover:bg-[#E8F7EE] text-[#17211B] hover:text-[#075E36] text-[12.5px] transition-colors active:scale-95"
+                        className="px-2.5 py-1 rounded-[8px] bg-white/80 hover:bg-[#E8F7EE] border border-[#E3E9E4]/70 hover:border-[#8AD3A8]/60 text-[#17211B] hover:text-[#075E36] text-[12.5px] transition-all shadow-2xs active:scale-95"
                       >
                         {tag}
                       </button>
@@ -319,14 +330,14 @@ export default function HomePage() {
                   </div>
                 </motion.div>
 
-                {/* Primary Actions */}
+                {/* Primary Actions with Ambient Light */}
                 <motion.div
                   variants={heroItem}
-                  className="flex items-center flex-wrap gap-3 pt-2"
+                  className="flex items-center flex-wrap gap-3.5 pt-1"
                 >
                   <Link
                     href="/explore"
-                    className="inline-flex items-center gap-2 h-[46px] px-6 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white font-medium text-[15px] shadow-xs transition-all active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 h-[48px] px-6 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white font-medium text-[15px] shadow-sm transition-all active:scale-[0.98] cta-glow-emerald"
                   >
                     <span>Explore products</span>
                     <ArrowRight className="w-4 h-4" />
@@ -334,7 +345,7 @@ export default function HomePage() {
 
                   <Link
                     href="/seller/onboarding"
-                    className="inline-flex items-center justify-center h-[46px] px-6 rounded-[12px] bg-white border border-[#E3E9E4] hover:bg-[#F3F6F4] text-[#17211B] font-medium text-[15px] transition-colors active:scale-[0.98]"
+                    className="inline-flex items-center justify-center h-[48px] px-6 rounded-[12px] bg-white/90 backdrop-blur-xs border border-[#E3E9E4] hover:bg-white hover:border-[#8AD3A8]/60 text-[#17211B] font-medium text-[15px] transition-all active:scale-[0.98] shadow-2xs hover:shadow-xs"
                   >
                     Open your store
                   </Link>
@@ -342,9 +353,9 @@ export default function HomePage() {
 
                 <motion.div
                   variants={heroItem}
-                  className="flex items-start gap-2 text-[13.5px] text-[#5B6861] pt-1"
+                  className="flex items-start gap-2.5 text-[13.5px] text-[#5B6861] pt-1"
                 >
-                  <span className="w-2 h-2 rounded-full bg-[#0F7D41] mt-1.5 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-[#0F7D41] mt-1.5 shrink-0 shadow-[0_0_8px_rgba(15,125,65,0.6)]" />
                   <span>
                     No groups to join. When you find something you like, message
                     the seller directly on WhatsApp.
@@ -352,19 +363,33 @@ export default function HomePage() {
                 </motion.div>
               </motion.div>
 
-              {/* Right Column: Staggered Hero 4-Product Grid */}
-              <motion.div
-                variants={heroGridContainer}
-                initial="hidden"
-                animate="visible"
-                className="lg:col-span-5 grid grid-cols-2 gap-3.5 sm:gap-4"
-              >
-                {heroProducts.map((product) => (
-                  <motion.div key={product.id} variants={heroCardItem}>
-                    <ProductCard product={product} />
-                  </motion.div>
-                ))}
-              </motion.div>
+              {/* Right Column: Staggered Hero 4-Product Grid with Ambient Backdrop */}
+              <div className="lg:col-span-5 relative">
+                {/* Ambient Soft Glow Behind Product Composition */}
+                <div
+                  aria-hidden="true"
+                  className="absolute -inset-6 bg-gradient-to-tr from-[#8AD3A8]/25 via-[#0F7D41]/12 to-[#FAF3EA]/35 rounded-[36px] blur-2xl -z-10 opacity-75"
+                />
+
+                {/* Floating Frosted Glass Discovery Badge */}
+                <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-surface-float text-[12px] font-medium text-[#17211B] shadow-md border border-white/95 mb-3.5">
+                  <span className="w-2 h-2 rounded-full bg-[#0F7D41] animate-pulse" />
+                  <span>Verified WhatsApp Catalogues · Douala &amp; Yaoundé</span>
+                </div>
+
+                <motion.div
+                  variants={heroGridContainer}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-2 gap-3.5 sm:gap-4"
+                >
+                  {heroProducts.map((product) => (
+                    <motion.div key={product.id} variants={heroCardItem}>
+                      <ProductCard product={product} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -422,9 +447,9 @@ export default function HomePage() {
                 >
                   <Link
                     href={`/explore?category=${encodeURIComponent(cat.name)}`}
-                    className="group bg-white p-4 rounded-[16px] border border-[#E3E9E4] hover:border-[#0F7D41]/40 hover:shadow-xs transition-colors flex flex-col justify-between h-28"
+                    className="group bg-white/90 backdrop-blur-xs p-4 rounded-[18px] border border-[#E3E9E4] hover:border-[#0F7D41]/40 hover:shadow-[0_10px_28px_-6px_rgba(15,125,65,0.08),0_2px_8px_rgba(0,0,0,0.02)] specular-edge-top transition-all duration-200 flex flex-col justify-between h-28 hover:-translate-y-0.5"
                   >
-                    <div className="w-9 h-9 rounded-[10px] bg-[#E8F7EE] flex items-center justify-center group-hover:bg-[#D5EEDD] transition-colors">
+                    <div className="w-10 h-10 rounded-[12px] bg-[#E8F7EE]/80 group-hover:bg-[#E8F7EE] group-hover:shadow-[0_0_14px_rgba(15,125,65,0.22)] flex items-center justify-center transition-all duration-200 border border-[#8AD3A8]/20">
                       {getCategoryIcon(cat.iconName)}
                     </div>
                     <div>
@@ -556,9 +581,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* HOW IT WORKS FOR SHOPPERS */}
-        <section className="py-16 border-t border-[#E3E9E4] bg-white">
-          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+        {/* HOW IT WORKS FOR SHOPPERS WITH AMBIENT ILLUMINATION */}
+        <section className="py-16 sm:py-20 border-t border-[#E3E9E4] bg-gradient-to-b from-white via-[#F7FAF8] to-white relative overflow-hidden">
+          {/* Subtle ambient light field */}
+          <div
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-gradient-to-r from-[#8AD3A8]/12 via-[#0F7D41]/06 to-[#FAF3EA]/20 rounded-full blur-3xl -z-10 pointer-events-none"
+          />
+
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 relative z-10">
             <motion.h2
               initial="hidden"
               whileInView="visible"
@@ -591,9 +622,9 @@ export default function HomePage() {
                     transition: { duration: 0.22, ease: EASE_OUT },
                   },
                 }}
-                className="p-6 rounded-[20px] bg-[#F7F9F7] border border-[#E3E9E4]"
+                className="p-6 sm:p-7 rounded-[22px] glass-surface-card specular-edge-top border border-white/85 hover:shadow-[0_16px_36px_-8px_rgba(15,125,65,0.08)] transition-all duration-200 group hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-[12px] bg-white border border-[#E3E9E4] flex items-center justify-center text-[#0F7D41] mb-5">
+                <div className="w-11 h-11 rounded-[14px] bg-[#E8F7EE]/80 group-hover:bg-[#E8F7EE] group-hover:shadow-[0_0_16px_rgba(15,125,65,0.25)] border border-[#8AD3A8]/20 flex items-center justify-center text-[#0F7D41] mb-5 transition-all duration-200">
                   <Search className="w-5 h-5" />
                 </div>
                 <h3 className="font-display font-bold text-lg text-[#17211B] mb-2">
@@ -614,9 +645,9 @@ export default function HomePage() {
                     transition: { duration: 0.22, ease: EASE_OUT },
                   },
                 }}
-                className="p-6 rounded-[20px] bg-[#F7F9F7] border border-[#E3E9E4]"
+                className="p-6 sm:p-7 rounded-[22px] glass-surface-card specular-edge-top border border-white/85 hover:shadow-[0_16px_36px_-8px_rgba(15,125,65,0.08)] transition-all duration-200 group hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-[12px] bg-white border border-[#E3E9E4] flex items-center justify-center text-[#0F7D41] mb-5">
+                <div className="w-11 h-11 rounded-[14px] bg-[#E8F7EE]/80 group-hover:bg-[#E8F7EE] group-hover:shadow-[0_0_16px_rgba(15,125,65,0.25)] border border-[#8AD3A8]/20 flex items-center justify-center text-[#0F7D41] mb-5 transition-all duration-200">
                   <ShoppingBag className="w-5 h-5" />
                 </div>
                 <h3 className="font-display font-bold text-lg text-[#17211B] mb-2">
@@ -634,12 +665,12 @@ export default function HomePage() {
                   visible: {
                     opacity: 1,
                     y: 0,
-                    transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+                    transition: { duration: 0.22, ease: EASE_OUT },
                   },
                 }}
-                className="p-6 rounded-[20px] bg-[#F7F9F7] border border-[#E3E9E4]"
+                className="p-6 sm:p-7 rounded-[22px] glass-surface-card specular-edge-top border border-white/85 hover:shadow-[0_16px_36px_-8px_rgba(15,125,65,0.08)] transition-all duration-200 group hover:-translate-y-0.5"
               >
-                <div className="w-10 h-10 rounded-[12px] bg-white border border-[#E3E9E4] flex items-center justify-center text-[#0F7D41] mb-5">
+                <div className="w-11 h-11 rounded-[14px] bg-[#E8F7EE]/80 group-hover:bg-[#E8F7EE] group-hover:shadow-[0_0_16px_rgba(15,125,65,0.25)] border border-[#8AD3A8]/20 flex items-center justify-center text-[#0F7D41] mb-5 transition-all duration-200">
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <h3 className="font-display font-bold text-lg text-[#17211B] mb-2">

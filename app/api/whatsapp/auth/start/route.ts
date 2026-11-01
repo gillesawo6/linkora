@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getMetaConfig } from '@/lib/meta-config';
+import { createOAuthState } from '@/lib/whatsapp-connection-store';
 
 export async function GET(request: NextRequest) {
-  const metaAppId = process.env.META_APP_ID;
-  const redirectUri =
-    process.env.META_OAUTH_REDIRECT_URI ||
-    `${process.env.APP_URL || 'http://localhost:3000'}/api/whatsapp/auth/callback`;
+  const { metaAppId, redirectUri } = getMetaConfig();
 
   if (!metaAppId) {
     return NextResponse.json(
@@ -20,8 +19,10 @@ export async function GET(request: NextRequest) {
   }
 
   const { searchParams } = new URL(request.url);
-  const shopId = searchParams.get('shopId') || 'default-shop';
-  const state = Buffer.from(JSON.stringify({ shopId, timestamp: Date.now() })).toString('base64');
+  const shopId = searchParams.get('shopId') || 'shop-maison-ndolo';
+
+  // Generate cryptographically secure CSRF state token tied to shopId and store with TTL
+  const { state, expiresAt } = createOAuthState(shopId);
 
   const scopes = [
     'whatsapp_business_management',
@@ -37,5 +38,7 @@ export async function GET(request: NextRequest) {
     authUrl,
     state,
     redirectUri,
+    shopId,
+    expiresAt,
   });
 }

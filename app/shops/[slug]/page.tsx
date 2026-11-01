@@ -170,8 +170,13 @@ function ShopStorefrontContent() {
       <MarketplaceHeader currentPath="/shops" />
 
       <main className="flex-1 max-w-[1280px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 pb-24 sm:pb-16">
-        {/* Cover banner */}
-        <div className="w-full h-36 sm:h-52 rounded-[20px] bg-gradient-to-r from-[#E8F7EE] via-[#F3F6F4] to-[#FAF3EA] border border-[#E3E9E4] relative overflow-hidden mb-6">
+        {/* Cover banner with abstract topography and ambient lighting */}
+        <div className="w-full h-36 sm:h-56 rounded-[24px] bg-gradient-to-r from-[#E8F7EE] via-[#F3F6F4] to-[#FAF3EA] border border-[#E3E9E4] relative overflow-hidden mb-6 specular-edge-top shadow-xs">
+          {/* Ambient Lighting Field */}
+          <div
+            aria-hidden="true"
+            className="absolute -top-16 -right-16 w-80 h-80 bg-gradient-to-br from-[#8AD3A8]/30 to-transparent rounded-full blur-2xl pointer-events-none"
+          />
           {shop.coverImage ? (
             <>
               <Image
@@ -191,11 +196,17 @@ function ShopStorefrontContent() {
           )}
         </div>
 
-        {/* Store Profile Header */}
-        <div className="bg-white rounded-[24px] border border-[#E3E9E4] p-6 sm:p-8 shadow-xs mb-8">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+        {/* Store Profile Header with Glassmorphism & Specular Lighting */}
+        <div className="glass-surface-hero specular-edge-top rounded-[28px] p-6 sm:p-8 mb-8 border border-white/85 shadow-[0_16px_44px_-8px_rgba(15,125,65,0.08)] relative overflow-hidden">
+          {/* Subtle ambient glow behind avatar */}
+          <div
+            aria-hidden="true"
+            className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#8AD3A8]/20 via-[#0F7D41]/05 to-transparent rounded-full blur-2xl -z-10 pointer-events-none"
+          />
+
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 relative z-10">
             <div className="flex items-start gap-5">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#E8F7EE] text-[#075E36] font-display font-bold text-3xl sm:text-4xl flex items-center justify-center shrink-0 border-2 border-white shadow-sm overflow-hidden relative">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#E8F7EE] text-[#075E36] font-display font-bold text-3xl sm:text-4xl flex items-center justify-center shrink-0 border-2 border-white shadow-sm overflow-hidden relative ring-4 ring-[#E8F7EE]/70">
                 {shop.avatarImage ? (
                   <Image
                     src={shop.avatarImage}
@@ -240,7 +251,7 @@ function ShopStorefrontContent() {
                   href={shopWaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-[46px] px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold flex items-center gap-2 shadow-xs transition-colors"
+                  className="h-[46px] px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold flex items-center gap-2 shadow-xs transition-all cta-glow-emerald"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Ask on WhatsApp</span>
@@ -255,7 +266,7 @@ function ShopStorefrontContent() {
               <button
                 type="button"
                 onClick={handleCopyShopLink}
-                className="h-[46px] px-4 rounded-[12px] bg-white border border-[#E3E9E4] hover:bg-[#F3F6F4] text-[#17211B] text-[14px] font-medium flex items-center gap-2 transition-colors"
+                className="h-[46px] px-4 rounded-[12px] bg-white/90 backdrop-blur-xs border border-[#E3E9E4] hover:bg-white hover:border-[#8AD3A8]/60 text-[#17211B] text-[14px] font-medium flex items-center gap-2 transition-all shadow-2xs hover:shadow-xs"
               >
                 <Copy className="w-4 h-4 text-[#5B6861]" />
                 <span className="hidden sm:inline">Copy shop link</span>
