@@ -13,6 +13,7 @@ interface ProductImageProps {
   aspectRatio?: 'square' | 'video' | 'portrait' | 'auto';
   fill?: boolean;
   productName?: string;
+  containerClassName?: string;
 }
 
 export function ProductImage({
@@ -24,6 +25,7 @@ export function ProductImage({
   sizes = '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px',
   aspectRatio = 'square',
   productName,
+  containerClassName = '',
 }: ProductImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -49,7 +51,9 @@ export function ProductImage({
 
   return (
     <div
-      className={`relative w-full ${aspectClass} overflow-hidden rounded-[16px] flex items-center justify-center transition-colors duration-200 select-none`}
+      className={`relative w-full ${
+        aspectClass ? aspectClass : ''
+      } overflow-hidden rounded-[16px] flex items-center justify-center transition-colors duration-200 select-none ${containerClassName}`}
       style={{ backgroundColor: bgTint }}
     >
       {/* Subtle skeleton shimmer while image is loading */}

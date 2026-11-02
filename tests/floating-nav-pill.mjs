@@ -69,6 +69,28 @@ test('FloatingNavPill respects prefers-reduced-motion', () => {
   assert.ok(content.includes('shouldReduceMotion'), 'Must adapt animations for reduced motion');
 });
 
+test('FloatingNavPill active tab is clean bold green text without background bubble', () => {
+  const pillPath = path.resolve('components/marketplace/floating-nav-pill.tsx');
+  const content = fs.readFileSync(pillPath, 'utf-8');
+  assert.ok(!content.includes('bg-[#E8F7EE]/95'), 'Must not have exaggerated background capsule on active tab');
+  assert.ok(content.includes('text-[#0F7D41] font-bold'), 'Active tab must be bold green text');
+});
+
+test('Header navbar has no underline on active tab and uses bold green text only', () => {
+  const headerPath = path.resolve('components/marketplace/header.tsx');
+  const content = fs.readFileSync(headerPath, 'utf-8');
+  assert.ok(!content.includes('shadow-[0_0_8px_rgba(15,125,65,0.7)]'), 'Header must not have underline glow');
+  assert.ok(!content.includes('h-0.5 bg-[#0F7D41]'), 'Header must not have underline bar');
+  assert.ok(content.includes("currentPath === '/explore' ? 'text-[#0F7D41] font-bold' : ''"), 'Header active tab must be bold green text only');
+});
+
+test('Product details page image showcase frame has no uneven padding', () => {
+  const productPagePath = path.resolve('app/products/[id]/page.tsx');
+  const content = fs.readFileSync(productPagePath, 'utf-8');
+  assert.ok(!content.includes('p-3 sm:p-5'), 'Product showcase frame must not have uneven padding');
+  assert.ok(content.includes('containerClassName="w-full h-full rounded-[24px]"'), 'Product showcase must fill frame cleanly');
+});
+
 console.log(`\n========================================`);
 console.log(`TEST SUMMARY: ${passed} / ${total} PASSED`);
 console.log(`========================================\n`);

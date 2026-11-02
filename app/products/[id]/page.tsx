@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
 
       <main className="flex-1 max-w-[1280px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 pb-28 sm:pb-16">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-[13px] text-[#5B6861] mb-6 overflow-x-auto whitespace-nowrap">
+        <nav className="flex items-center gap-2 text-[13px] text-[#5B6861] mb-4 sm:mb-6 overflow-x-auto whitespace-nowrap">
           <Link href="/" className="hover:text-[#17211B] transition-colors">
             Home
           </Link>
@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
           {/* LEFT: GALLERY & COLOR VARIANTS */}
           <div className="lg:col-span-7 space-y-4">
             {/* Main 1:1 Showcase Frame */}
-            <div className="w-full aspect-square rounded-[24px] bg-white border border-[#E3E9E4] overflow-hidden p-3 sm:p-5 shadow-xs flex items-center justify-center">
+            <div className="w-full aspect-square rounded-[24px] bg-white border border-[#E3E9E4] overflow-hidden shadow-xs relative isolate">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeImageIdx}
@@ -149,7 +149,7 @@ export default function ProductDetailPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full h-full rounded-[18px] overflow-hidden relative"
+                  className="w-full h-full absolute inset-0"
                 >
                   <ProductImage
                     src={gallery[activeImageIdx] || product.imageUrl}
@@ -158,6 +158,8 @@ export default function ProductDetailPage() {
                     bgTint={product.bgTint}
                     priority={true}
                     sizes="(max-width: 1024px) 100vw, 700px"
+                    aspectRatio="auto"
+                    containerClassName="w-full h-full rounded-[24px]"
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
@@ -166,7 +168,7 @@ export default function ProductDetailPage() {
 
             {/* Catalogue Photo Angles / Gallery Thumbnails */}
             {gallery.length > 1 && (
-              <div className="flex items-center gap-3 overflow-x-auto pb-2">
+              <div className="flex items-center gap-3 overflow-x-auto pb-2 pt-0.5">
                 {gallery.map((imgUrl, idx) => (
                   <button
                     key={idx}
@@ -186,6 +188,8 @@ export default function ProductDetailPage() {
                         productName={product.name}
                         bgTint={product.bgTint}
                         sizes="80px"
+                        aspectRatio="auto"
+                        containerClassName="w-full h-full rounded-[10px]"
                       />
                     </div>
                   </button>

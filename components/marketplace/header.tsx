@@ -101,36 +101,27 @@ export function MarketplaceHeader({
           <div className="hidden sm:flex items-center gap-6 text-[15px] font-medium text-[#5B6861]">
             <Link
               href="/explore"
-              className={`relative py-1 hover:text-[#17211B] transition-colors ${
-                currentPath === '/explore' ? 'text-[#0F7D41] font-semibold' : ''
+              className={`py-1 transition-colors hover:text-[#0F7D41] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41] rounded-[4px] ${
+                currentPath === '/explore' ? 'text-[#0F7D41] font-bold' : ''
               }`}
             >
               <span>Explore</span>
-              {currentPath === '/explore' && (
-                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
-              )}
             </Link>
             <Link
               href="/categories"
-              className={`relative py-1 hover:text-[#17211B] transition-colors ${
-                currentPath === '/categories' ? 'text-[#0F7D41] font-semibold' : ''
+              className={`py-1 transition-colors hover:text-[#0F7D41] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41] rounded-[4px] ${
+                currentPath === '/categories' ? 'text-[#0F7D41] font-bold' : ''
               }`}
             >
               <span>Categories</span>
-              {currentPath === '/categories' && (
-                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
-              )}
             </Link>
             <Link
               href="/shops"
-              className={`relative py-1 hover:text-[#17211B] transition-colors ${
-                currentPath === '/shops' ? 'text-[#0F7D41] font-semibold' : ''
+              className={`py-1 transition-colors hover:text-[#0F7D41] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41] rounded-[4px] ${
+                currentPath === '/shops' ? 'text-[#0F7D41] font-bold' : ''
               }`}
             >
               <span>Discover shops</span>
-              {currentPath === '/shops' && (
-                <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-[#0F7D41] rounded-full shadow-[0_0_8px_rgba(15,125,65,0.7)]" />
-              )}
             </Link>
           </div>
 

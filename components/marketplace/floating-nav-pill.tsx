@@ -196,10 +196,10 @@ export function FloatingNavPill({
                       <Link
                         key={item.href}
                         href={item.href}
-                        className={`px-2.5 sm:px-3 py-1.5 rounded-full text-[13px] sm:text-[13.5px] font-medium transition-all ${
+                        className={`px-2 sm:px-2.5 py-1 text-[13px] sm:text-[13.5px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41] rounded-[6px] ${
                           isActive
-                            ? 'bg-[#E8F7EE]/95 text-[#075E36] font-semibold shadow-2xs glow-emerald-dot'
-                            : 'text-[#5B6861] hover:text-[#17211B] hover:bg-[#F7F9F7]'
+                            ? 'text-[#0F7D41] font-bold'
+                            : 'text-[#5B6861] font-medium hover:text-[#0F7D41]'
                         }`}
                         aria-current={isActive ? 'page' : undefined}
                       >
