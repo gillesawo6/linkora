@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'motion/react';
 import { Product } from '@/lib/types';
 import { ProductImage } from '../ui/product-image';
 import { SpeechBubbleIcon } from '../ui/linkora-icons';
@@ -40,24 +39,19 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.99 }}
-      transition={{ duration: 0.18, ease: 'easeOut' }}
-      className="h-full"
-    >
+    <div className="h-full relative hover:z-20 focus-within:z-20">
       <Link
         href={`/products/${product.id}`}
-        className="group flex flex-col h-full bg-white/95 rounded-[22px] p-3 border border-[#E3E9E4] hover:border-[#0F7D41]/35 hover:shadow-[0_12px_28px_-6px_rgba(15,125,65,0.09),0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-200 specular-edge-top"
+        className="group flex flex-col h-full clay-elevate-card rounded-[22px] p-3 specular-edge-top"
       >
         {/* 1:1 Square Image */}
-        <div className="w-full aspect-square rounded-[16px] overflow-hidden relative">
+        <div className="w-full aspect-square rounded-[16px] overflow-hidden relative isolate">
           <ProductImage
             src={product.imageUrl}
             alt={product.imageAlt || product.name}
             productName={product.name}
             bgTint={product.bgTint}
-            className="group-hover:scale-[1.03] transition-transform duration-300 ease-out"
+            className="group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
           />
         </div>
 
@@ -65,7 +59,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="pt-3 pb-1 flex flex-col flex-1 justify-between">
           <div>
             {/* Two-line title clamp */}
-            <h3 className="font-sans font-medium text-[15px] leading-snug text-[#17211B] line-clamp-2 min-h-[2.5rem] group-hover:text-[#0F7D41] transition-colors duration-150">
+            <h3 className="font-sans font-medium text-[15px] leading-snug text-[#17211B] line-clamp-2 min-h-[2.5rem] group-hover:text-[#0F7D41] transition-colors duration-250 ease-out">
               {product.name}
             </h3>
 
@@ -99,13 +93,13 @@ export function ProductCard({ product }: ProductCardProps) {
               onClick={handleQuickAsk}
               title={`Ask ${product.shopName} on WhatsApp`}
               aria-label={`Ask ${product.shopName} about ${product.name} on WhatsApp`}
-              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/60 hover:bg-[#E8F7EE] hover:shadow-[0_0_12px_rgba(15,125,65,0.3)] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
+              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/70 hover:bg-[#E8F7EE] glow-whatsapp-aura active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
             >
               <SpeechBubbleIcon className="w-4 h-4" />
             </button>
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

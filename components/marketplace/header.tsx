@@ -1,10 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Search, X, LayoutDashboard, Store } from 'lucide-react';
 import { LinkoraLogo } from '../ui/linkora-icons';
 import { SearchAutocomplete } from './search-autocomplete';
+import { FloatingNavPill } from './floating-nav-pill';
 import { useStore } from '@/lib/context/store-context';
 
 interface MarketplaceHeaderProps {
@@ -14,15 +16,44 @@ interface MarketplaceHeaderProps {
 }
 
 export function MarketplaceHeader({
-  currentPath = '/',
+  currentPath,
   onSearchSubmit,
   searchValue = '',
 }: MarketplaceHeaderProps) {
+  const pathname = usePathname();
+  const effectivePath = currentPath || pathname || '/';
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isPillVisible, setIsPillVisible] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const { user, currentShop } = useStore();
 
+  useEffect(() => {
+    const headerEl = headerRef.current;
+    if (!headerEl || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show pill only when header has scrolled past the top of the viewport
+        const isPastHeader = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
+        setIsPillVisible(isPastHeader);
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: '0px 0px 0px 0px',
+      }
+    );
+
+    observer.observe(headerEl);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-[#E3E9E4]/70 shadow-[0_4px_24px_-4px_rgba(15,125,65,0.03)] transition-colors specular-edge-top">
+    <>
+      <header
+        ref={headerRef}
+        className="relative z-30 w-full bg-white/80 backdrop-blur-md border-b border-[#E3E9E4]/70 shadow-[0_4px_24px_-4px_rgba(15,125,65,0.03)] transition-colors specular-edge-top"
+      >
       <div className="max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-10 h-16 sm:h-18 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Zone */}
         <div className="flex items-center gap-3 sm:gap-6 lg:gap-8 shrink-0">
@@ -154,7 +185,7 @@ export function MarketplaceHeader({
                 </Link>
                 <Link
                   href="/seller/onboarding"
-                  className="inline-flex items-center justify-center h-8 sm:h-10 px-2.5 sm:px-4 rounded-[8px] sm:rounded-[10px] text-[12px] sm:text-[14px] font-medium bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white shadow-xs transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0F7D41] cta-glow-emerald"
+                  className="inline-flex items-center justify-center h-8 sm:h-10 px-2.5 sm:px-4 rounded-[8px] sm:rounded-[10px] text-[12px] sm:text-[14px] font-medium bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white transition duration-200 ease-out shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0F7D41] cta-glow-emerald"
                 >
                   <span className="hidden min-[350px]:inline">Open your store</span>
                   <span className="inline min-[350px]:hidden">Sell</span>
@@ -179,5 +210,14 @@ export function MarketplaceHeader({
         </div>
       )}
     </header>
-  );
+
+    {/* Floating Compact Navigation Pill */}
+    <FloatingNavPill
+      isVisible={isPillVisible}
+      currentPath={effectivePath}
+      onSearchSubmit={onSearchSubmit}
+      searchValue={searchValue}
+    />
+  </>
+);
 }

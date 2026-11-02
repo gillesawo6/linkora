@@ -251,7 +251,7 @@ function ShopStorefrontContent() {
                   href={shopWaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-[46px] px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold flex items-center gap-2 shadow-xs transition-all cta-glow-emerald"
+                  className="h-[46px] px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold flex items-center gap-2 transition duration-200 ease-out cta-glow-emerald"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Ask on WhatsApp</span>

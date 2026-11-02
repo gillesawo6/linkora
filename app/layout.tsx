@@ -1,22 +1,7 @@
 import type { Metadata } from 'next';
-import { Bricolage_Grotesque, Figtree } from 'next/font/google';
 import './globals.css';
 import { StoreProvider } from '@/lib/context/store-context';
 import { ToastContainer } from '@/components/ui/toast-container';
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
-  variable: '--font-bricolage',
-  display: 'swap',
-});
-
-const figtree = Figtree({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-figtree',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'Linkora — Discover great shops beyond your WhatsApp groups',
@@ -42,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${figtree.variable}`}>
+    <html lang="en">
       <body
         className="min-h-screen bg-[#F7F9F7] text-[#17211B] antialiased"
         suppressHydrationWarning

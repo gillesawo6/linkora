@@ -22,7 +22,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus-visible:ring-3 focus-visible:ring-[#8AD3A8] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none select-none';
+      'inline-flex items-center justify-center font-medium transition duration-200 ease-out focus:outline-none focus-visible:ring-3 focus-visible:ring-[#8AD3A8] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none select-none';
 
     // PDF spec: "BUTTONS · 46 PX TALL, 12 PX RADIUS"
     const sizeStyles = {
@@ -36,7 +36,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     switch (variant) {
       case 'primary':
         variantStyles =
-          'bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white shadow-xs';
+          'bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white cta-glow-emerald';
         break;
       case 'secondary':
         variantStyles =

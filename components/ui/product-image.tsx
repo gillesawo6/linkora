@@ -72,8 +72,8 @@ export function ProductImage({
           referrerPolicy="no-referrer"
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
-          className={`object-cover object-center transition-all duration-300 ease-out ${
-            isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          className={`object-cover object-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isLoaded ? 'opacity-100' : 'opacity-0 scale-95'
           } ${className}`}
         />
       ) : (

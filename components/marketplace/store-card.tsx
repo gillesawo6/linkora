@@ -94,7 +94,7 @@ export function StoreCard({ shop }: StoreCardProps) {
             onClick={handleWhatsAppContact}
             title={`Ask ${shop.name} on WhatsApp`}
             aria-label={`Ask ${shop.name} on WhatsApp`}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/60 hover:bg-[#E8F7EE] hover:shadow-[0_0_12px_rgba(15,125,65,0.3)] active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[#0F7D41] bg-[#E8F7EE]/70 hover:bg-[#E8F7EE] glow-whatsapp-aura active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F7D41]"
           >
             <SpeechBubbleIcon className="w-4 h-4" />
           </button>

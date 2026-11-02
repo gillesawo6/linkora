@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&family=Figtree:wght@400;500;600;700&display=swap');
 
 @theme {
   --color-brand-primary: #0F7D41;
@@ -14,8 +15,8 @@
   --color-brand-charcoal: #101A15;
   --color-brand-error: #C62828;
 
-  --font-display: var(--font-bricolage), system-ui, sans-serif;
-  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
@@ -56,14 +57,18 @@ body {
 }
 
 /* =========================================================================
-   LINKORA PREMIUM MATERIAL SYSTEM: GLASSMORPHISM & AMBIENT LIGHTING
+   LINKORA COHESIVE MATERIAL SYSTEM:
+   1. Glassmorphism (Overlays & Panels)
+   2. Apple Liquid Glass (Floating Controls & Navigation)
+   3. Claymorphism (Selected Tactile Chips & Icon Accents)
+   4. Subtle Ambient Glow (Action Emphasis & Focus Radiance)
    ========================================================================= */
 
 /* Primary elevated frosted glass panel (Hero search, modals, featured panels) */
 .glass-surface-hero {
-  background: rgba(255, 255, 255, 0.84);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow:
     0 16px 44px -8px rgba(15, 125, 65, 0.07),
@@ -83,20 +88,178 @@ body {
     inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
 }
 
+/* Claymorphism Elevation Card: Tactile physical lift & multi-tier soft shadows */
+.clay-elevate-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(227, 233, 228, 0.85);
+  box-shadow:
+    0 4px 14px -2px rgba(23, 33, 27, 0.04),
+    0 1px 3px 0 rgba(0, 0, 0, 0.02),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px 0 rgba(23, 33, 27, 0.02);
+  /* Symmetrical smooth transition for both entering and leaving hover */
+  transition:
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 280ms ease-out;
+  will-change: transform, box-shadow;
+}
+
+.clay-elevate-card:hover {
+  transform: translateY(-5px);
+  z-index: 20;
+  border-color: rgba(215, 225, 218, 0.95);
+  box-shadow:
+    0 20px 38px -8px rgba(23, 33, 27, 0.09),
+    0 8px 18px -3px rgba(23, 33, 27, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.02),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 2px 0 rgba(23, 33, 27, 0.02);
+}
+
+.clay-elevate-card:focus-visible {
+  transform: translateY(-5px);
+  z-index: 20;
+  outline: none;
+  border-color: rgba(138, 211, 168, 0.8);
+  box-shadow:
+    0 20px 38px -8px rgba(23, 33, 27, 0.09),
+    0 8px 18px -3px rgba(23, 33, 27, 0.04),
+    0 0 0 3px rgba(138, 211, 168, 0.35),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1);
+}
+
+.clay-elevate-card:active {
+  transform: translateY(-1px);
+  transition:
+    transform 140ms ease-out,
+    box-shadow 140ms ease-out;
+  box-shadow:
+    0 8px 16px -4px rgba(23, 33, 27, 0.06),
+    0 3px 6px rgba(0, 0, 0, 0.02),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clay-elevate-card,
+  .clay-elevate-card:hover,
+  .clay-elevate-card:focus-visible,
+  .clay-elevate-card:active {
+    transform: none !important;
+    transition: box-shadow 150ms ease, border-color 150ms ease !important;
+  }
+}
+
 /* Floating overlay glass (badges, popovers, notification tags) */
 .glass-surface-float {
-  background: rgba(255, 255, 255, 0.76);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow:
     0 12px 32px -4px rgba(0, 0, 0, 0.08),
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
 }
 
+/* Apple Liquid Glass: Multi-layered refraction, specular rim, and pure depth */
+.liquid-glass-pill {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.82) 50%,
+    rgba(247, 253, 249, 0.88) 100%
+  );
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 12px 36px -4px rgba(0, 0, 0, 0.08),
+    0 4px 14px -2px rgba(15, 125, 65, 0.05),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
+  transition: box-shadow 220ms ease, border-color 200ms ease;
+}
+
+.liquid-glass-pill:hover {
+  box-shadow:
+    0 16px 42px -4px rgba(0, 0, 0, 0.11),
+    0 6px 18px -2px rgba(15, 125, 65, 0.07),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* Liquid Glass Control: Compact interactive search/filter inputs */
+.liquid-glass-control {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 252, 249, 0.88) 100%
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(227, 233, 228, 0.85);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Claymorphism: Soft, sculpted tactile volume for isolated icon controls & chips */
+.clay-tactile-chip {
+  background: linear-gradient(145deg, #FFFFFF, #F4F8F5);
+  border: 1px solid rgba(227, 233, 228, 0.7);
+  box-shadow:
+    2px 3px 8px rgba(23, 33, 27, 0.04),
+    -1px -1px 4px rgba(255, 255, 255, 0.95),
+    inset 1px 1px 1.5px rgba(255, 255, 255, 0.98),
+    inset -1px -1px 2px rgba(15, 125, 65, 0.04);
+  transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-tactile-chip:hover {
+  background: linear-gradient(145deg, #FFFFFF, #EDF7F1);
+  border-color: rgba(138, 211, 168, 0.6);
+  box-shadow:
+    3px 4px 12px rgba(15, 125, 65, 0.08),
+    -1px -1px 4px rgba(255, 255, 255, 1),
+    inset 1px 1px 2px rgba(255, 255, 255, 1),
+    inset -1px -1px 2px rgba(15, 125, 65, 0.06);
+  transform: translateY(-1px);
+}
+
+.clay-tactile-chip:active {
+  transform: translateY(1px);
+  box-shadow:
+    1px 1px 3px rgba(23, 33, 27, 0.04),
+    inset 1px 2px 4px rgba(15, 125, 65, 0.1);
+}
+
+/* Claymorphism Icon Bubble: Ceramic-feel tactile icon containers */
+.clay-tactile-bubble {
+  background: linear-gradient(140deg, #FFFFFF 0%, #EEF7F1 100%);
+  border: 1px solid rgba(138, 211, 168, 0.35);
+  box-shadow:
+    3px 4px 10px rgba(15, 125, 65, 0.07),
+    -2px -2px 6px rgba(255, 255, 255, 0.95),
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 1),
+    inset -1.5px -1.5px 3px rgba(15, 125, 65, 0.06);
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-tactile-bubble:hover {
+  box-shadow:
+    4px 6px 16px rgba(15, 125, 65, 0.12),
+    -2px -2px 6px rgba(255, 255, 255, 1),
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 1),
+    inset -1.5px -1.5px 3px rgba(15, 125, 65, 0.08);
+  transform: translateY(-1px) scale(1.02);
+}
+
 /* Glass Badge: Subtle brand green frosted pill */
 .glass-badge {
-  background: rgba(232, 247, 238, 0.82);
+  background: rgba(232, 247, 238, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(138, 211, 168, 0.45);
@@ -137,15 +300,53 @@ body {
   );
   pointer-events: none;
   z-index: 10;
+  opacity: 0.82;
+  transition: opacity 380ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* CTA Ambient Glow */
-.cta-glow-emerald {
-  box-shadow: 0 4px 16px -2px rgba(15, 125, 65, 0.28);
-  transition: box-shadow 200ms ease-out, transform 150ms ease-out;
+.clay-elevate-card:hover::before {
+  opacity: 1;
 }
+
+/* Reusable Primary CTA Ambient Emerald Glow (Hover-only, smooth enter & exit) */
+.cta-glow-emerald {
+  /* Rest state: clean subtle shadow without permanent neon glow */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+  transition:
+    box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 220ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: box-shadow;
+}
+
 .cta-glow-emerald:hover {
-  box-shadow: 0 6px 24px 0 rgba(15, 125, 65, 0.38);
+  /* Subtly focused ambient emerald radiance during hover */
+  box-shadow:
+    0 8px 24px -4px rgba(15, 125, 65, 0.28),
+    0 3px 8px -1px rgba(15, 125, 65, 0.14);
+}
+
+.cta-glow-emerald:active {
+  box-shadow:
+    0 2px 6px -1px rgba(15, 125, 65, 0.20),
+    0 1px 2px 0 rgba(15, 125, 65, 0.10);
+}
+
+/* WhatsApp Action Aura Glow */
+.glow-whatsapp-aura {
+  transition:
+    box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 200ms ease,
+    transform 160ms ease-out;
+  box-shadow: 0 2px 8px rgba(15, 125, 65, 0.12);
+}
+.glow-whatsapp-aura:hover {
+  box-shadow: 0 0 16px 2px rgba(15, 125, 65, 0.28);
+}
+
+/* Active Nav Dot Glow */
+.glow-emerald-dot {
+  box-shadow: 0 0 8px 1px rgba(15, 125, 65, 0.65);
 }
 
 /* Smooth motion limits */

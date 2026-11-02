@@ -302,7 +302,7 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => handleSearchSubmit()}
-                      className="h-11 px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold transition-all active:scale-[0.98] shrink-0 cta-glow-emerald"
+                      className="h-11 px-5 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white text-[14px] font-semibold transition duration-200 ease-out active:scale-[0.98] shrink-0 cta-glow-emerald"
                     >
                       Search
                     </button>
@@ -322,7 +322,7 @@ export default function HomePage() {
                         key={tag}
                         type="button"
                         onClick={() => handleQuickFilter(tag)}
-                        className="px-2.5 py-1 rounded-[8px] bg-white/80 hover:bg-[#E8F7EE] border border-[#E3E9E4]/70 hover:border-[#8AD3A8]/60 text-[#17211B] hover:text-[#075E36] text-[12.5px] transition-all shadow-2xs active:scale-95"
+                        className="px-2.5 py-1 rounded-[10px] clay-tactile-chip text-[#17211B] hover:text-[#075E36] text-[12.5px] font-medium transition-all active:scale-95"
                       >
                         {tag}
                       </button>
@@ -337,7 +337,7 @@ export default function HomePage() {
                 >
                   <Link
                     href="/explore"
-                    className="inline-flex items-center gap-2 h-[48px] px-6 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white font-medium text-[15px] shadow-sm transition-all active:scale-[0.98] cta-glow-emerald"
+                    className="inline-flex items-center gap-2 h-[48px] px-6 rounded-[12px] bg-[#0F7D41] hover:bg-[#0B6636] active:bg-[#075E36] text-white font-medium text-[15px] transition duration-200 ease-out active:scale-[0.98] cta-glow-emerald"
                   >
                     <span>Explore products</span>
                     <ArrowRight className="w-4 h-4" />
@@ -372,8 +372,8 @@ export default function HomePage() {
                 />
 
                 {/* Floating Frosted Glass Discovery Badge */}
-                <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-surface-float text-[12px] font-medium text-[#17211B] shadow-md border border-white/95 mb-3.5">
-                  <span className="w-2 h-2 rounded-full bg-[#0F7D41] animate-pulse" />
+                <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill text-[12px] font-medium text-[#17211B] shadow-sm mb-3.5">
+                  <span className="w-2 h-2 rounded-full bg-[#0F7D41] animate-pulse glow-emerald-dot" />
                   <span>Verified WhatsApp Catalogues · Douala &amp; Yaoundé</span>
                 </div>
 
@@ -449,7 +449,7 @@ export default function HomePage() {
                     href={`/explore?category=${encodeURIComponent(cat.name)}`}
                     className="group bg-white/90 backdrop-blur-xs p-4 rounded-[18px] border border-[#E3E9E4] hover:border-[#0F7D41]/40 hover:shadow-[0_10px_28px_-6px_rgba(15,125,65,0.08),0_2px_8px_rgba(0,0,0,0.02)] specular-edge-top transition-all duration-200 flex flex-col justify-between h-28 hover:-translate-y-0.5"
                   >
-                    <div className="w-10 h-10 rounded-[12px] bg-[#E8F7EE]/80 group-hover:bg-[#E8F7EE] group-hover:shadow-[0_0_14px_rgba(15,125,65,0.22)] flex items-center justify-center transition-all duration-200 border border-[#8AD3A8]/20">
+                    <div className="w-10 h-10 rounded-[12px] clay-tactile-bubble flex items-center justify-center transition-all duration-200">
                       {getCategoryIcon(cat.iconName)}
                     </div>
                     <div>
